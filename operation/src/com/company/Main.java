@@ -6,49 +6,69 @@ import java.util.regex.Pattern;
 public class Main {
 
     public static void main(String[] args) {
-        Scanner scanner=new Scanner();
-        Double first_num=0.0;
-        String oc=null;
-        Double second_num=0.0;
+        Scanner scanner=new Scanner(System.in);
 
-        //输入第一个数字
-        System.out.println("请输入数字");
-        for(i=1;i==1;){
-            try{
-                first_num=Double.parseDouble(scanner.nextLine().trim());
-                i=0;
-            }catch (Exception e){
-                System.out.println("输入数字不合法请重新输入");
-                i=1;
+        System.out.println("请输入");
+        String input=scanner.nextLine();
+
+        String num_regEx="[*+-/]";
+        String oc_regEx="\\d+";
+
+        String []nums_strs=input.split(num_regEx);
+        String []oc_strs=input.split(oc_regEx);
+
+        if(nums_strs.length-oc_strs.length!=1){
+
+        }
+        //判断运算符是否有非运算符
+        for(String tmp:oc_strs){
+            if (Pattern.matches(oc_regEx,tmp)==true){
+                System.out.println("输入错误");
+                break;
+            }
+        }
+        //判断数字数组是否有非数字
+        for(String tmp:nums_strs){
+            if (Pattern.matches(num_regEx,tmp)==true){
+                System.out.println("输入错误1");
+                break;
             }
         }
 
-        //输入运算符
-        System.out.println("请输入运算符");
-        for(i=1;i==1;){
-            String regEx="[+-*/]";
-            Pattern pattern=new Pattern(regEx);
-            Matcher matcher = pattern.matcher(oc);
-
-            if(matcher.matches()){
-                i=0;
-            }else {
-                System.out.println("输入运算符不合法请重新输入");
-                i=1;
+        //运算函数
+        for(int i=0;i<oc_strs.length-1;i++){
+            if(Pattern.matches("[*/]",oc_strs[i])){
+                switch (oc_strs[i]){
+                    case "*":
+                        nums_strs[i]=String.valueOf(Double.valueOf(nums_strs[i])*Double.valueOf(nums_strs[i+1]));
+                        nums_strs[i+1]=nums_strs[i];
+                        break;
+                    case "/":
+                        nums_strs[i]=String.valueOf(Double.valueOf(nums_strs[i])/Double.valueOf(nums_strs[i+1]));
+                        nums_strs[i+1]=nums_strs[i];
+                        break;
+                }
             }
         }
 
-        //输入第二个数字
-        System.out.println("请输入数字");
-        for(i=1;i==1;){
-            try{
-                second_num=Double.parseDouble(scanner.nextLine().trim());
-                i=0;
-            }catch (Exception e){
-                System.out.println("输入数字不合法请重新输入");
-                i=1;
+        int index=0;
+        for(int i=0;i<oc_strs.length-1;i++){
+            if(Pattern.matches("[+-]",oc_strs[i])){
+                index=i;
+                switch (oc_strs[i]){
+                    case "+":
+                        nums_strs[i]=String.valueOf(Double.valueOf(nums_strs[i])+Double.valueOf(nums_strs[i+1]));
+                        nums_strs[i+1]=nums_strs[i];
+                        break;
+                    case "-":
+                        nums_strs[i]=String.valueOf(Double.valueOf(nums_strs[i])-Double.valueOf(nums_strs[i+1]));
+                        nums_strs[i+1]=nums_strs[i];
+                        break;
+                }
             }
         }
+
+        System.out.println(input+"的结果为："+nums_strs[index]);
 
     }
 }
